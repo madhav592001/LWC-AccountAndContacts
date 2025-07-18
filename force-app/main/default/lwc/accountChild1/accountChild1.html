@@ -1,0 +1,10 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item class="slds-m-left_medium" size="8">
+            <lightning-input  label=" Enter Account Name" value={searchAccountText} onchange={handleSearchAccountTextChange}></lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item class="slds-m-top_large slds-m-left_medium">
+            <lightning-button label="Search" onclick={handleSearchAccountText}></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

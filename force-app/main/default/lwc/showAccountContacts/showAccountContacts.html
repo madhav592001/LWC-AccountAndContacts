@@ -1,0 +1,19 @@
+<template>
+    <lightning-card title='Contacts' >
+
+        <template if:true={hasContact}>
+            <template for:each={contacts} for:item="contact">
+                <lightning-layout key={contact.Id} class="slds-box slds-m-around_small">
+                    <lightning-layout-item>
+                        <b>{contact.Name}</b>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+        </template>
+
+        <template if:false={hasContact}>
+            <p class="slds-align_absolute-center">No contacts found for this account or Select Account.</p>
+        </template>
+
+    </lightning-card>
+</template>
