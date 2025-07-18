@@ -10,7 +10,7 @@ public with sharing class FetchAccounts {
         }
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled()
     public static List<Contact> fetchContacts(String accountId){
         try { 
             return [SELECT Id, Name FROM Contact WHERE accountId = :accountId ];

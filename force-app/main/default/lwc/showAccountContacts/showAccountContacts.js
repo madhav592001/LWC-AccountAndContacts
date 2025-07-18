@@ -1,5 +1,5 @@
 import { MessageContext, subscribe, unsubscribe } from 'lightning/messageService';
-import { LightningElement, wire } from 'lwc';
+import { api, LightningElement, track, wire } from 'lwc';
 import SendAccount from '@salesforce/messageChannel/SendAccount__c';
 import fetchContacts from '@salesforce/apex/FetchAccounts.fetchContacts';
 
@@ -11,6 +11,10 @@ export default class ShowAccountContacts extends LightningElement {
     accountName;
     contacts;
     hasContact;
+    addContactModalOpen = false;
+    editContactModalOpen = false;
+    @api recordId;
+    contactIdToEdit;
 
     connectedCallback() {
         if(!this.subscription) {
@@ -34,6 +38,29 @@ export default class ShowAccountContacts extends LightningElement {
             console.error('Error fetching contacts: ', error);
         }
         console.log('contacts'+this.contacts)
+    }
+
+    handleAddContactClick(event) {
+        this.addContactModalOpen = true;
+    }
+
+    closeContactModal(event) {
+        this.addContactModalOpen = false;
+    }
+
+    handleAddContactSuccess(event) {
+        this.addContactModalOpen = false;
+        this.editContactModalOpen = false;
+        this.getContacts();
+    }
+
+    handleEditContactClick(event) {
+        this.contactIdToEdit = event.target.dataset.contactId;
+        this.editContactModalOpen= true;
+    }
+
+    closeEditModal(event) {
+        this.editContactModalOpen = false;
     }
 
     disconnectedCallback() {

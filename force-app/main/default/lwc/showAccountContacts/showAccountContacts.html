@@ -1,19 +1,70 @@
 <template>
     <lightning-card title='Contacts' >
-
         <template if:true={hasContact}>
+            <lightning-button-icon icon-name="utility:adduser" onclick={handleAddContactClick}  variant="brand" alternative-text="Add user" class="slds-m-left_xx-small" title="Add user"></lightning-button-icon>
             <template for:each={contacts} for:item="contact">
                 <lightning-layout key={contact.Id} class="slds-box slds-m-around_small">
-                    <lightning-layout-item>
+                    <lightning-layout-item size="8px">
                         <b>{contact.Name}</b>
                     </lightning-layout-item>
+                    <lightning-layout-item size="4px">
+                        <lightning-button-icon icon-name="utility:edit" onclick={handleEditContactClick} variant="brand" data-contact-id={contact.Id} alternative-text="Edit" class="slds-m-left_xx-small" title="Edit"></lightning-button-icon>
+                    <lightning-button-icon icon-name="utility:delete" variant="brand" alternative-text="Delete" class="slds-m-left_xx-small" title="Delete"></lightning-button-icon>
+                    </lightning-layout-item>                    
                 </lightning-layout>
             </template>
         </template>
-
         <template if:false={hasContact}>
-            <p class="slds-align_absolute-center">No contacts found for this account or Select Account.</p>
+            <template if:true={accountId}>
+                <b>No contacts found for this account.</b>
+            </template>
+            <template if:false={accountId}>
+                <b>No Accounts Selected</b>
+            </template>
         </template>
 
+        <template if:true={addContactModalOpen}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create New Contact</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning-record-edit-form onsuccess={handleAddContactSuccess} object-api-name="Contact" record-id={recordId}>
+                            <lightning-input-field field-name="Name"> </lightning-input-field>
+                            <lightning-input-field field-name="AccountId" value={accountId}> </lightning-input-field>
+                            <lightning-button variant="brand" type="submit" label="Save"></lightning-button>
+                        </lightning-record-edit-form>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={closeContactModal} >Cancel</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <template if:true={editContactModalOpen}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Edit Contact</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                        <lightning-record-edit-form onsuccess={handleAddContactSuccess} object-api-name="Contact" record-id={contactIdToEdit}>
+                            <lightning-input-field field-name="Name"> </lightning-input-field>
+                            <lightning-input-field field-name="AccountId" value={accountId}> </lightning-input-field>
+                            <lightning-button variant="brand" type="submit" label="Save"></lightning-button>
+                        </lightning-record-edit-form>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={closeEditModal} >Cancel</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
     </lightning-card>
 </template>
